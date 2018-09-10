@@ -17,18 +17,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
 <script type="text/babel">
 const tasks = [
-    {
-        name: "Task 1",
-        description: "Task 1 description"
-    },
-    {
-        name: "Task 2",
-        description: "Task 2 description"
-    },
-    {
-        name: "Task 3",
-        description: "Task 3 description"
-    }
+        {
+            name: "Task 1",
+            description: "Task 1 description"
+        },
+        {
+            name: "Task 2",
+            description: "Task 2 description"
+        },
+        {
+            name: "Task 3",
+            description: "Task 3 description"
+        }
 ];
 
 class Task extends React.Component {
@@ -49,15 +49,47 @@ class Task extends React.Component {
 }
 
 class TaskList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            tasks: props.data
+        };
+
+        this.handleInputNameChange = this.handleInputNameChange.bind(this);
+        this.handleInputDescriptionChange = this.handleInputDescriptionChange.bind(this);
+        this.addChild = this.addChild.bind(this);
+    }
+    tmpName;
+    tmpDescription;
+
+    handleInputNameChange(event) {
+        this.tmpName = event.target.value;
+    }
+    handleInputDescriptionChange(event) {
+        this.tmpDescription = event.target.value;
+    }
+    addChild() {
+        this.state.tasks.push({
+            name: this.tmpName,
+            description: this.tmpDescription
+        });
+        this.forceUpdate();
+    }
+
     render() {
        return(
-           <ul>
-               {
-                   this.props.data.map(function(item){
-                       return <Task name={item.name} description={item.description} />
-                   })
-               }
-           </ul>);
+           <div>
+               <input name="name" type="text" onChange={this.handleInputNameChange} /> <br/>
+               <input name="description" type="text" onChange={this.handleInputDescriptionChange} /> <br/>
+               <button onClick={this.addChild}>Add</button> <br/>
+               <ul>
+                   {
+                       this.props.data.map(function(item){
+                           return <Task name={item.name} description={item.description} />
+                       })
+                   }
+               </ul>
+           </div>);
     }
 }
 
