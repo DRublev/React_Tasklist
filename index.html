@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasklist</title>
+</head>
+<style>
+    
+</style>
+<body>
+
+<div id="task-container">
+</div>
+
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+<script type="text/babel">
+const tasks = [
+    {
+        name: "Task 1",
+        description: "Task 1 description"
+    },
+    {
+        name: "Task 2",
+        description: "Task 2 description"
+    },
+    {
+        name: "Task 3",
+        description: "Task 3 description"
+    }
+];
+
+class Task extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: props.name,
+            description: props.description
+        };
+    }
+    render() {
+        return(
+            <li>
+                <h3>{this.state.name}</h3>
+                <p>{this.state.description}</p>
+            </li>);
+    }
+}
+
+class TaskList extends React.Component {
+    render() {
+       return(
+           <ul>
+               {
+                   this.props.data.map(function(item){
+                       return <Task name={item.name} description={item.description} />
+                   })
+               }
+           </ul>);
+    }
+}
+
+ReactDOM.render(
+    <TaskList data={tasks}/>,
+    document.getElementById("task-container")
+)
+</script>
+</body>
+</html>
