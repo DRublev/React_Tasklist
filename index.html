@@ -16,16 +16,19 @@
 <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
 <script type="text/babel">
-const tasks = [
+var tasks = [
         {
+            id: 0,
             name: "Task 1",
             description: "Task 1 description"
         },
         {
+            id: 1,
             name: "Task 2",
             description: "Task 2 description"
         },
         {
+            id: 2,
             name: "Task 3",
             description: "Task 3 description"
         }
@@ -35,17 +38,31 @@ class Task extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: props.id,
             name: props.name,
             description: props.description
         };
+        this.onDeleteHandler = this.onDeleteHandler.bind(this);
     }
+
+    onDeleteHandler = () => {
+        var id = tasks.findIndex(t => t.id === this.state.id);
+        tasks.splice(id, 1);
+        updateState();
+    };
+
     render() {
         return(
             <li>
                 <h3>{this.state.name}</h3>
                 <p>{this.state.description}</p>
+                <button onClick={this.onDeleteHandler}>delete</button>
             </li>);
     }
+}
+
+function updateState() {
+    this.setState({tasks: tasks});
 }
 
 class TaskList extends React.Component {
@@ -55,37 +72,39 @@ class TaskList extends React.Component {
             tasks: props.data
         };
 
-        this.handleInputNameChange = this.handleInputNameChange.bind(this);
-        this.handleInputDescriptionChange = this.handleInputDescriptionChange.bind(this);
-        this.addChild = this.addChild.bind(this);
+        this.onNameChangedHandler = this.onNameChangedHandler.bind(this);
+        this.onDescriptionChangedHandler = this.onDescriptionChangedHandler.bind(this);
+        this.onAddChildHandler = this.onAddChildHandler.bind(this);
+        updateState = updateState.bind(this);
     }
     tmpName;
     tmpDescription;
 
-    handleInputNameChange(event) {
+    onNameChangedHandler = (event) => {
         this.tmpName = event.target.value;
-    }
-    handleInputDescriptionChange(event) {
+    };
+    onDescriptionChangedHandler = (event) => {
         this.tmpDescription = event.target.value;
-    }
-    addChild() {
-        this.state.tasks.push({
+    };
+    onAddChildHandler = () => {
+        tasks.push({
+            id: tasks.length + 1,
             name: this.tmpName,
             description: this.tmpDescription
         });
-        this.forceUpdate();
-    }
+        updateState();
+    };
 
     render() {
        return(
            <div>
-               <input name="name" type="text" onChange={this.handleInputNameChange} /> <br/>
-               <input name="description" type="text" onChange={this.handleInputDescriptionChange} /> <br/>
-               <button onClick={this.addChild}>Add</button> <br/>
+               <input name="name" type="text" onChange={this.onNameChangedHandler} /> <br/>
+               <input name="description" type="text" onChange={this.onDescriptionChangedHandler} /> <br/>
+               <button onClick={this.onAddChildHandler}>Add</button> <br/>
                <ul>
                    {
-                       this.props.data.map(function(item){
-                           return <Task name={item.name} description={item.description} />
+                       this.state.tasks.map(function(item){
+                           return <Task id={item.id} name={item.name} description={item.description} />
                        })
                    }
                </ul>
