@@ -37,16 +37,11 @@ var tasks = [
 class Task extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            id: props.id,
-            name: props.name,
-            description: props.description
-        };
         this.onDeleteHandler = this.onDeleteHandler.bind(this);
     }
 
     onDeleteHandler = () => {
-        var id = tasks.findIndex(t => t.id === this.state.id);
+        var id = tasks.findIndex(t => t.id === this.props.id);
         tasks.splice(id, 1);
         updateState();
     };
@@ -54,8 +49,8 @@ class Task extends React.Component {
     render() {
         return(
             <li>
-                <h3>{this.state.name}</h3>
-                <p>{this.state.description}</p>
+                <h3>{this.props.name}</h3>
+                <p>{this.props.description}</p>
                 <button onClick={this.onDeleteHandler}>delete</button>
             </li>);
     }
